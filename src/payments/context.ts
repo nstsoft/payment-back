@@ -1,17 +1,22 @@
-import { PaymentStrategy, Payout } from './interfaces';
+import { PaymentStrategy, Payout, Account } from './interfaces';
 
-export class PaymentContext {
-  constructor(private strategy: PaymentStrategy) {}
+export class PaymentContext<P, A> {
+  constructor(private strategy: PaymentStrategy<P, A>) {}
 
-  setStrategy(strategy: PaymentStrategy) {
-    this.strategy = strategy;
+  get payout(): Payout<P> {
+    const strategy = this.strategy;
+    return {
+      create: function (...args: [string, number, string]) {
+        return strategy.payout.create(...args);
+      },
+    };
   }
 
-  get payout(): Payout {
+  get account(): Account<A> {
     const strategy = this.strategy;
     return {
       create: function (...args) {
-        return strategy.payout.create(...args);
+        return strategy.account.create(...args);
       },
     };
   }

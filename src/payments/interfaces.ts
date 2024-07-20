@@ -1,7 +1,12 @@
-export interface Payout {
-  create(recipient: string, amount: number, currency: string): Promise<unknown>;
+export interface Payout<P> {
+  create(recipient: string, amount: number, currency: string): Promise<P>;
 }
 
-export interface PaymentStrategy {
-  payout: Payout;
+export interface Account<A> {
+  create(): Promise<A>;
+}
+
+export interface PaymentStrategy<P, A> {
+  payout: Payout<P>;
+  account: Account<A>;
 }
