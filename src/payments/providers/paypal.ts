@@ -1,24 +1,31 @@
 import paypal from 'paypal-rest-sdk';
-import { Payout, PaymentStrategy, Account } from '../interfaces';
-import { ApplyCodeActionCommandResult } from 'typescript';
+import config from '../../config';
+import { PaymentStrategy } from '../interfaces';
 
 paypal.configure({
-  mode: 'sandbox',
-  client_id: 'your-paypal-client-id',
-  client_secret: 'your-paypal-client-secret',
+  mode: config.PAYAPAL_MODE,
+  client_id: config.PAYPAL_CLIENT_ID,
+  client_secret: config.PAYPAL_CLIENT_SECRET,
 });
 
-export class PayPalPayout implements Payout<string, 'PAYPAL'> {
-  async create(receiver: string, value: number, currency: string = 'USD'): Promise<string> {
+type Payout = {
+  create: (receiver: string, params: { amount: number; currency?: string }) => Promise<unknown>;
+};
+type Account = {
+  create: (email: string) => Promise<unknown>;
+};
+
+export class PayPalPayout implements Payout {
+  async create(receiver: string, { amount, currency = 'USD' }): Promise<string> {
     const payout = {
       sender_batch_header: { email_subject: 'You have a payment' },
       items: [
         {
           recipient_type: 'EMAIL',
-          amount: { value, currency },
+          amount: { value: amount, currency },
           receiver,
           note: 'Payout note',
-          sender_item_id: 'item-1',
+          sender_item_id: config.PAYPAL_SENDER,
         },
       ],
     };
@@ -30,13 +37,13 @@ export class PayPalPayout implements Payout<string, 'PAYPAL'> {
           reject(error);
         } else {
           console.log('PayPal payment successful', payout);
-          resolve('PayPal payment successful');
+          resolve(payout);
         }
       });
     });
   }
 }
-export class PayPalAccount implements Account<number, 'PAYPAL'> {
+export class PayPalAccount implements Account {
   async create(email: string): Promise<number> {
     return new Promise((resolve) => {
       return resolve(1);
@@ -44,9 +51,9 @@ export class PayPalAccount implements Account<number, 'PAYPAL'> {
   }
 }
 
-export class PayPalPayment implements PaymentStrategy<string, number, 'PAYPAL'> {
-  private payPalPayout: Payout<string, 'PAYPAL'>;
-  private payPalAccount: Account<number, 'PAYPAL'>;
+export class PayPalPayment implements PaymentStrategy<Payout, Account> {
+  private payPalPayout: Payout;
+  private payPalAccount: Account;
   constructor() {
     this.payPalPayout = new PayPalPayout();
     this.payPalAccount = new PayPalAccount();

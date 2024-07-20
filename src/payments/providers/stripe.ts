@@ -1,10 +1,21 @@
-import { PaymentStrategy, Payout, Account, STRATEGY } from '../interfaces';
+import { PaymentStrategy } from '../interfaces';
+import config from '../../config';
 import Stripe from 'stripe';
 
-const stripe = new Stripe('your-stripe-secret-key', { apiVersion: '2024-06-20' });
+const stripe = new Stripe(config.STRIPE_API_KEY, { apiVersion: '2024-06-20' });
 
-export class StripePayout implements Payout<Stripe.Response<Stripe.Transfer>, 'STRIPE'> {
-  create(recipient: string, amount: number, currency: string = 'usd'): Promise<Stripe.Response<Stripe.Transfer>> {
+type Payout = {
+  create: (
+    receiver: string,
+    params: { amount: number; currency?: string },
+  ) => Promise<Stripe.Response<Stripe.Transfer>>;
+};
+type Account = {
+  create: () => Promise<unknown>;
+};
+
+export class StripePayout implements Payout {
+  create(recipient: string, { amount, currency = 'usd' }): Promise<Stripe.Response<Stripe.Transfer>> {
     return stripe.transfers.create({
       amount: amount * 100, // Stripe expects amounts in cents
       currency: currency,
@@ -13,7 +24,7 @@ export class StripePayout implements Payout<Stripe.Response<Stripe.Transfer>, 'S
   }
 }
 
-export class StripeAccount implements Account<Stripe.Response<Stripe.Account>, 'STRIPE'> {
+export class StripeAccount implements Account {
   create() {
     return stripe.accounts.create({
       controller: {
@@ -25,12 +36,10 @@ export class StripeAccount implements Account<Stripe.Response<Stripe.Account>, '
   }
 }
 
-export class StripePayment
-  implements PaymentStrategy<Stripe.Response<Stripe.Transfer>, Stripe.Response<Stripe.Account>, STRATEGY>
-{
-  private stripePayout: Payout<Stripe.Response<Stripe.Transfer>, 'STRIPE'>;
-  private stripeAccount: Account<Stripe.Response<Stripe.Account>, 'STRIPE'>;
-  strategy: STRATEGY = 'STRIPE';
+export class StripePayment implements PaymentStrategy<Payout, Account> {
+  private stripePayout: Payout;
+  private stripeAccount: Account;
+
   constructor() {
     this.stripePayout = new StripePayout();
     this.stripeAccount = new StripeAccount();

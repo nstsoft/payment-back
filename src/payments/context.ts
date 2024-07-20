@@ -1,9 +1,9 @@
-import { PaymentStrategy, Payout, Account, STRATEGY } from './interfaces';
+import { PaymentStrategy } from './interfaces';
 
-export class PaymentContext<P, A, S extends STRATEGY> {
-  constructor(private strategy: PaymentStrategy<P, A, S>) {}
+export class PaymentContext<P, A> {
+  constructor(private strategy: PaymentStrategy<P, A>) {}
 
-  get payout(): Payout<P, S> {
+  get payout() {
     return this.strategy.payout;
   }
 
