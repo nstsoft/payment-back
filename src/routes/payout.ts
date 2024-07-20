@@ -11,10 +11,10 @@ router.post('/withdraw', async (req, res) => {
   console.log('withdraw');
   const paymentContext = new PaymentContext(paypal);
   const payment = await paymentContext.payout.create('eeee', amount, 'usd');
-  const account = await paymentContext.account.create();
+  const account = await paymentContext.account.create('ddd');
 
-  console.log({ payment, account });
-  return res.json(payment);
+  console.log({ account, payment });
+  return res.json(account);
 });
 
 export default router;

@@ -8,7 +8,7 @@ paypal.configure({
   client_secret: 'your-paypal-client-secret',
 });
 
-export class PayPalPayout implements Payout<string> {
+export class PayPalPayout implements Payout<string, 'PAYPAL'> {
   async create(receiver: string, value: number, currency: string = 'USD'): Promise<string> {
     const payout = {
       sender_batch_header: { email_subject: 'You have a payment' },
@@ -36,19 +36,20 @@ export class PayPalPayout implements Payout<string> {
     });
   }
 }
-export class PayPalAccount implements Account<number> {
-  async create(): Promise<number> {
+export class PayPalAccount implements Account<number, 'PAYPAL'> {
+  async create(email: string): Promise<number> {
     return new Promise((resolve) => {
       return resolve(1);
     });
   }
 }
 
-export class PayPalPayment implements PaymentStrategy<string, number> {
-  private payPalPayout: Payout<string>;
-  private payPalAccount: Account<number>;
+export class PayPalPayment implements PaymentStrategy<string, number, 'PAYPAL'> {
+  private payPalPayout: Payout<string, 'PAYPAL'>;
+  private payPalAccount: Account<number, 'PAYPAL'>;
   constructor() {
     this.payPalPayout = new PayPalPayout();
+    this.payPalAccount = new PayPalAccount();
   }
 
   get payout() {
