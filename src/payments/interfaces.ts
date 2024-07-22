@@ -1,4 +1,4 @@
 export interface PaymentStrategy<P, A> {
-  payout: P;
+  payments: P;
   account: A;
 }

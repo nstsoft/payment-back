@@ -59,7 +59,7 @@ export class PayPalPayment implements PaymentStrategy<Payout, Account> {
     this.payPalAccount = new PayPalAccount();
   }
 
-  get payout() {
+  get payments() {
     return this.payPalPayout;
   }
   get account() {
