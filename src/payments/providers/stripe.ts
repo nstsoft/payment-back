@@ -7,7 +7,7 @@ const stripe = new Stripe(config.STRIPE_API_KEY, { apiVersion: '2024-06-20' });
 
 type Payout = {
   /**
-   * Creates a transfer to the specified destination(accoint) with the given amount and currency.
+   * Creates a transfer to the specified destination(account) with the given amount and currency.
    *
    * @param {string} destination - The destination for the transfer.
    * @param {Object} options - The options for the transfer.

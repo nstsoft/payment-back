@@ -3,7 +3,7 @@ import config from '../../config';
 import { PaymentStrategy } from '../interfaces';
 
 paypal.configure({
-  mode: config.PAYAPAL_MODE,
+  mode: config.PAYPAL_MODE,
   client_id: config.PAYPAL_CLIENT_ID,
   client_secret: config.PAYPAL_CLIENT_SECRET,
 });
