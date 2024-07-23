@@ -11,6 +11,10 @@ interface Config {
   PAYPAL_SENDER: string;
   PAYONEER_CLIENT_ID: string;
   PAYONEER_CLIENT_SECRET: string;
+  PAYONEER_AUTH_URL: string;
+  PAYONEER_API_URL: string;
+  PAYONEER_SCOPES: string;
+  PAYONEER_PROGRAMM_ID: string;
 }
 
 const config: Config = {
@@ -24,6 +28,10 @@ const config: Config = {
   STRIPE_RETURN_URL: process.env.STRIPE_RETURN_URL || '',
   PAYONEER_CLIENT_ID: process.env.PAYONEER_CLIENT_ID || '',
   PAYONEER_CLIENT_SECRET: process.env.PAYONEER_CLIENT_SECRET || '',
+  PAYONEER_AUTH_URL: process.env.PAYONEER_AUTH_URL || '',
+  PAYONEER_API_URL: process.env.PAYONEER_API_URL || '',
+  PAYONEER_SCOPES: process.env.PAYONEER_SCOPES || '',
+  PAYONEER_PROGRAMM_ID: process.env.PAYONEER_PROGRAMM_ID || '',
 };
 
 export default config;
