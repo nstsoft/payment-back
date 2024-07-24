@@ -1,23 +1,6 @@
-import 'dotenv/config';
-
-interface Config {
-  port: number;
-  STRIPE_API_KEY: string;
-  STRIPE_REFRESH_URL: string;
-  STRIPE_RETURN_URL: string;
-  PAYPAL_MODE: string;
-  PAYPAL_CLIENT_ID: string;
-  PAYPAL_CLIENT_SECRET: string;
-  PAYPAL_SENDER: string;
-  PAYONEER_CLIENT_ID: string;
-  PAYONEER_CLIENT_SECRET: string;
-  PAYONEER_AUTH_URL: string;
-  PAYONEER_API_URL: string;
-  PAYONEER_SCOPES: string;
-  PAYONEER_PROGRAMM_ID: string;
-}
-
-const config: Config = {
+'use strict';
+require('dotenv/config');
+var config = {
   port: process.env.PORT ? parseInt(process.env.PORT, 10) : 3000,
   STRIPE_API_KEY: process.env.STRIPE_API_KEY || '',
   PAYPAL_MODE: process.env.PAYPAL_MODE || '',
@@ -31,7 +14,8 @@ const config: Config = {
   PAYONEER_AUTH_URL: process.env.PAYONEER_AUTH_URL || '',
   PAYONEER_API_URL: process.env.PAYONEER_API_URL || '',
   PAYONEER_SCOPES: process.env.PAYONEER_SCOPES || '',
-  PAYONEER_PROGRAMM_ID: process.env.PAYONEER_PROGRAMM_ID || '',
+  PAYONEER_PROGRAM_ID: process.env.PAYONEER_PROGRAM_ID || '',
+  PAYONEER_REDIRECT_URL: process.env.PAYONEER_REDIRECT_URL || '',
 };
 
-export default config;
+module.exports = config;

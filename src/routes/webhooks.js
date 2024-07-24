@@ -1,5 +1,5 @@
-import express from 'express';
-import { PaymentContext, StripePayment, PayPalPayment } from '../payments';
+const express = require('express');
+const { PaymentContext, StripePayment, PayPalPayment } = require('../payments');
 
 const router = express.Router();
 
@@ -12,4 +12,4 @@ router.post('/stripe', async (req, res) => {
   return res.json('payment');
 });
 
-export default router;
+module.exports = router;
