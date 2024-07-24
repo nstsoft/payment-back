@@ -17,10 +17,6 @@ router.post('/withdraw', async (req, res) => {
 
   const paymentContext = new PaymentContext(payoneer);
   try {
-    // const payment = await paymentContext.payment.createTransfer(HARDCODED_USER.payoneerAccountId, {
-    //   amount,
-    //   currency: 'USD',
-    // });
     const payment = await paymentContext.payment.createTransfer(HARDCODED_USER.payoneerAccountId, {
       amount,
       currency: 'USD',
