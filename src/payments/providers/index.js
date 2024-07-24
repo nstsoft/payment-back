@@ -1,9 +1,9 @@
 const StripePayment = require('./stripe');
-const PayonnerPayment = require('./payoneer');
+const PayoneerPayment = require('./payoneer');
 const PayPalPayment = require('./paypal');
 
 module.exports = {
   StripePayment,
-  PayonnerPayment,
+  PayoneerPayment,
   PayPalPayment,
 };

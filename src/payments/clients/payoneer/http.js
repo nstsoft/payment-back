@@ -7,7 +7,7 @@ exports.authHttp = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-exports.apiHtpp = axios.create({
+exports.apiHttp = axios.create({
   baseURL: config.PAYONEER_API_URL,
   timeout: 1000,
   headers: { 'Content-Type': 'application/json' },

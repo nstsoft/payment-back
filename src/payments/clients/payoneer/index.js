@@ -1,18 +1,16 @@
-const { authHttp, apiHtpp } = require('./http');
+const { authHttp, apiHttp } = require('./http');
 const config = require('../../../config');
 const uuid = require('uuid4');
-
-console.log();
 
 class Payoneer {
   BASIC_AUTH = 'Basic ';
   client;
-  #programmId = config.PAYONEER_PROGRAM_ID;
+  #programId = config.PAYONEER_PROGRAM_ID;
 
   constructor({ clientId, clientSecret }) {
     this.BASIC_AUTH += Buffer.from(`${clientId}:${clientSecret}`, 'utf8').toString('base64');
 
-    this.client = apiHtpp;
+    this.client = apiHttp;
     this.client.interceptors.request.use(
       async (config) => {
         try {
@@ -20,7 +18,6 @@ class Payoneer {
           config.headers['Authorization'] = `Bearer ${accessToken}`;
           return config;
         } catch (error) {
-          console.log('-aaaaa-------========', error.response.status);
           return Promise.reject({ status: error.response.status, ...error.response.data });
         }
       },
@@ -29,7 +26,6 @@ class Payoneer {
   }
 
   async getAccessToken() {
-    console.log('=========================', config.PAYONEER_SCOPES);
     const { data } = await authHttp.post('/api/v2/oauth2/token', {
       headers: { Authorization: this.BASIC_AUTH },
       data: { scopes: config.PAYONEER_SCOPES, grant_type: 'client_credentials' },
@@ -44,12 +40,11 @@ class Payoneer {
       client_reference_id: payout.client_reference_id ?? uuid(),
     }));
 
-    return this.client.post(`/v4/programs/${this.#programmId}/masspayouts`, data).then((res) => res.data);
+    return this.client.post(`/v4/programs/${this.#programId}/masspayouts`, data).then((res) => res.data);
   }
 
   createAccount(data) {
-    console.log('++++++++++', data);
-    return this.client.post(`/v4/programs/${this.#programmId}/payees/registration-link `, data).then((res) => res.data);
+    return this.client.post(`/v4/programs/${this.#programId}/payees/registration-link `, data).then((res) => res.data);
   }
 
   get payments() {

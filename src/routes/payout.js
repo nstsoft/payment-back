@@ -1,9 +1,10 @@
 const express = require('express');
-const { PaymentContext, StripePayment, PayPalPayment, PayonnerPayment } = require('../payments');
+const { PaymentContext, StripePayment, PayPalPayment, PayoneerPayment } = require('../payments');
+
 const router = express.Router();
 const stripe = new StripePayment();
 const paypal = new PayPalPayment();
-const payoneer = new PayonnerPayment();
+const payoneer = new PayoneerPayment();
 
 const HARDCODED_USER = {
   stripeAccountId: 'acct_1PfNVNPav5aWqTAB',

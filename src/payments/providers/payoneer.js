@@ -57,7 +57,7 @@ class PayoneerAccount {
   }
 }
 
-class PayonnerPayment {
+class PayoneerPayment {
   payoneerPayments;
   payoneerAccount;
 
@@ -75,4 +75,4 @@ class PayonnerPayment {
   }
 }
 
-module.exports = PayonnerPayment;
+module.exports = PayoneerPayment;

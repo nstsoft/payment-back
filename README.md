@@ -12,7 +12,7 @@ Supports strategies as constructor arguments:
 
 - StripePayment
 - PayPalPayment
-- PayonnerPayment
+- PayoneerPayment
 
 Usage example :
 
