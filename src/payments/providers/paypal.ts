@@ -8,14 +8,41 @@ paypal.configure({
   client_secret: config.PAYPAL_CLIENT_SECRET,
 });
 
-type Payout = {
-  create: (receiver: string, params: { amount: number; currency?: string }) => Promise<unknown>;
-};
-type Account = {
-  create: (email: string) => Promise<unknown>;
+type Payment = {
+  /**
+   * Creates a PayPal transfer for a given receiver with the specified amount and currency.
+   *
+   * @param {string} receiver - The email address of the receiver.
+   *
+   * @param {Object} options - The options for the payout.
+   * @param {string} options.amount - The amount of the payout (in cents).
+   * @param {string} [options.currency='USD'] - The currency of the payout. Defaults to 'USD'.
+   *
+   * @return {Promise<Object>} A promise that resolves to the created payout object.
+   */
+  createTransfer: (receiver: string, params: { amount: string; currency?: string }) => Promise<unknown>;
 };
 
-export class PayPalPayout implements Payout {
+export class PayPalPayments implements Payment {
+  async createTransfer(receiver: string, { amount, currency = 'USD' }: { amount: string; currency?: string }) {
+    const value = +amount / 100;
+    const payout = {
+      sender_batch_header: { email_subject: 'You have a payment' },
+      items: [
+        {
+          recipient_type: 'EMAIL',
+          amount: { value: value + '', currency },
+          receiver,
+          note: 'Payout note',
+          sender_item_id: config.PAYPAL_SENDER,
+        },
+      ],
+    };
+
+    return new Promise((resolve, reject) => {
+      paypal.payout.create(payout, (error, payout) => (error ? reject(error) : resolve(payout)));
+    });
+  }
   async create(receiver: string, { amount, currency = 'USD' }): Promise<string> {
     const payout = {
       sender_batch_header: { email_subject: 'You have a payment' },
@@ -43,26 +70,15 @@ export class PayPalPayout implements Payout {
     });
   }
 }
-export class PayPalAccount implements Account {
-  async create(email: string): Promise<number> {
-    return new Promise((resolve) => {
-      return resolve(1);
-    });
-  }
-}
 
-export class PayPalPayment implements PaymentStrategy<Payout, Account> {
-  private payPalPayout: Payout;
-  private payPalAccount: Account;
+export class PayPalPayment implements PaymentStrategy<Payment> {
+  private payPalPayments: Payment;
+
   constructor() {
-    this.payPalPayout = new PayPalPayout();
-    this.payPalAccount = new PayPalAccount();
+    this.payPalPayments = new PayPalPayments();
   }
 
   get payments() {
-    return this.payPalPayout;
-  }
-  get account() {
-    return this.payPalAccount;
+    return this.payPalPayments;
   }
 }

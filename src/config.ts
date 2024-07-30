@@ -15,6 +15,7 @@ interface Config {
   PAYONEER_API_URL: string;
   PAYONEER_SCOPES: string;
   PAYONEER_PROGRAMM_ID: string;
+  PAYONEER_REDIRECT_URL: string;
 }
 
 const config: Config = {
@@ -32,6 +33,7 @@ const config: Config = {
   PAYONEER_API_URL: process.env.PAYONEER_API_URL || '',
   PAYONEER_SCOPES: process.env.PAYONEER_SCOPES || '',
   PAYONEER_PROGRAMM_ID: process.env.PAYONEER_PROGRAMM_ID || '',
+  PAYONEER_REDIRECT_URL: process.env.PAYONEER_REDIRECT_URL || '',
 };
 
 export default config;

@@ -1,11 +1,11 @@
 import express from 'express';
-import { PaymentContext, StripePayment, PayPalPayment, PayonnerPayment } from '../payments';
+import { PaymentContext, StripePayment, PayPalPayment, PayoneerPayment } from '../payments';
 
 const router = express.Router();
 
 const stripe = new StripePayment();
 const paypal = new PayPalPayment();
-const payoneer = new PayonnerPayment();
+const payoneer = new PayoneerPayment();
 
 const HARDCODED_USER = {
   stripeAccountId: 'acct_1PfNVNPav5aWqTAB',
@@ -33,7 +33,7 @@ router.post('/account', async (req, res) => {
   const accountBody = req.body;
 
   const paymentContext = new PaymentContext(stripe);
-  const account = await paymentContext.account.create(accountBody);
+  const account = await paymentContext.account.onboard(accountBody);
 
   return res.json(account);
 });
