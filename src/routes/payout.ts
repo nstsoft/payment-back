@@ -8,9 +8,9 @@ const paypal = new PayPalPayment();
 const payoneer = new PayoneerPayment();
 
 const HARDCODED_USER = {
-  stripeAccountId: 'acct_1PfNVNPav5aWqTAB',
-  payoneerAccountId: 'payoneerAccount',
-  paypalAccountId: 'paypalAccount',
+  stripeAccountId: 'acct_1Pm8CpQFkObjjrxl',
+  payoneerAccountId: 'snoops.co-buyer@gmail.com',
+  paypalAccountId: 'snoops.co-buyer@gmail.com',
 };
 
 /* Here You  should implement logig for  authentication
@@ -19,10 +19,10 @@ const HARDCODED_USER = {
 router.post('/withdraw', async (req, res) => {
   const amount = req.body.amount;
 
-  const paymentContext = new PaymentContext(payoneer);
+  const paymentContext = new PaymentContext(stripe);
 
   // const payment = await paymentContext.payment.withdraw(HARDCODED_USER.stripeAccountId, { amount, currency: 'usd' });
-  const payment = await paymentContext.payment.createTransfer(HARDCODED_USER.payoneerAccountId, {
+  const payment = await paymentContext.payment.createTransfer(HARDCODED_USER.stripeAccountId, {
     amount,
     currency: 'USD',
   });
@@ -32,8 +32,10 @@ router.post('/withdraw', async (req, res) => {
 router.post('/account', async (req, res) => {
   const accountBody = req.body;
 
+  console.log(accountBody);
+
   const paymentContext = new PaymentContext(stripe);
-  const account = await paymentContext.account.onboard(accountBody);
+  const account = await paymentContext.account.onboard({});
 
   return res.json(account);
 });

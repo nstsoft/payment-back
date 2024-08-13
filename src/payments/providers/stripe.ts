@@ -82,17 +82,18 @@ export class StripeAccount implements Account {
   async onboard(data: Partial<Stripe.AccountCreateParams>) {
     const account = await stripe.accounts.create({
       ...data,
-      // country: 'US',
-      controller: {
-        stripe_dashboard: { type: 'none' },
-        fees: { payer: 'application' },
-        losses: { payments: 'application' },
-        requirement_collection: 'application',
-      },
-      capabilities: {
-        transfers: { requested: true },
-      },
-      tos_acceptance: { service_agreement: 'recipient' },
+      country: 'US',
+      type: 'express',
+      // controller: {
+      //   stripe_dashboard: { type: 'none' },
+      //   fees: { payer: 'application' },
+      //   losses: { payments: 'application' },
+      //   requirement_collection: 'application',
+      // },
+      // capabilities: {
+      //   transfers: { requested: true },
+      // },
+      // tos_acceptance: { service_agreement: 'recipient' },
     });
 
     const link = await stripe.accountLinks.create({

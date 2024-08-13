@@ -1,8 +1,6 @@
 import config from '../src/config';
 import Stripe from 'stripe';
 
-console.log(config.STRIPE_API_KEY);
-
 const stripe = new Stripe(config.STRIPE_API_KEY, { apiVersion: '2024-06-20' });
 
 const run = async (account) => {
